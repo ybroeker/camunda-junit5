@@ -1,4 +1,4 @@
-package de.ybroeker.camunda.test.test;
+package de.ybroeker.camunda.test;
 
 import java.util.*;
 
@@ -19,14 +19,12 @@ import static org.junit.platform.commons.util.AnnotationUtils.findAnnotation;
  *
  * @see org.camunda.bpm.engine.test.ProcessEngineRule
  */
-public class ProcessEngineExtensionImpl implements BeforeTestExecutionCallback,
-                                                   AfterTestExecutionCallback,
-                                                   ParameterResolver {
+public class ProcessEngineExtension implements BeforeTestExecutionCallback,
+                                               AfterTestExecutionCallback,
+                                               ParameterResolver {
 
     //Per Instance
     private String configurationResource = "camunda.cfg.xml";
-
-    private String configurationResourceCompat = "activiti.cfg.xml";
 
     private final boolean ensureCleanAfterTest;
 
@@ -39,35 +37,31 @@ public class ProcessEngineExtensionImpl implements BeforeTestExecutionCallback,
 
     private final ThreadLocal<String> deploymentIdHolder = new ThreadLocal<>();
 
-    ///private ProcessEngine processEngine;
 
-    //private String deploymentId = null;
-
-
-    public ProcessEngineExtensionImpl() {
+    public ProcessEngineExtension() {
         this(false);
     }
 
-    public ProcessEngineExtensionImpl(final boolean ensureCleanAfterTest) {
+    public ProcessEngineExtension(final boolean ensureCleanAfterTest) {
         this.ensureCleanAfterTest = ensureCleanAfterTest;
         this.processEngineHolder = ThreadLocal.withInitial(this::getNewProcessEngine);
     }
 
-    public ProcessEngineExtensionImpl(final String configurationResource) {
+    public ProcessEngineExtension(final String configurationResource) {
         this(configurationResource, false);
     }
 
-    public ProcessEngineExtensionImpl(final String configurationResource, final boolean ensureCleanAfterTest) {
+    public ProcessEngineExtension(final String configurationResource, final boolean ensureCleanAfterTest) {
         this.configurationResource = configurationResource;
         this.ensureCleanAfterTest = ensureCleanAfterTest;
         this.processEngineHolder = ThreadLocal.withInitial(this::getNewProcessEngine);
     }
 
-    public ProcessEngineExtensionImpl(final ProcessEngine processEngine) {
+    public ProcessEngineExtension(final ProcessEngine processEngine) {
         this(processEngine, false);
     }
 
-    public ProcessEngineExtensionImpl(final ProcessEngine processEngine, final boolean ensureCleanAfterTest) {
+    public ProcessEngineExtension(final ProcessEngine processEngine, final boolean ensureCleanAfterTest) {
         this.processEngineHolder = ThreadLocal.withInitial(() -> processEngine);
         this.ensureCleanAfterTest = ensureCleanAfterTest;
     }
@@ -135,7 +129,7 @@ public class ProcessEngineExtensionImpl implements BeforeTestExecutionCallback,
         return getNewProcessEngine(this.configurationResource);
     }
 
-    private ProcessEngine getNewProcessEngine(String configurationResource) {
+    private ProcessEngine getNewProcessEngine(final String configurationResource) {
         final ProcessEngine processEngine = ProcessEngineConfiguration
                 .createProcessEngineConfigurationFromResource(configurationResource)
                 .setJdbcUrl("jdbc:h2:mem:")//anonymous DB for each engine
@@ -174,12 +168,12 @@ public class ProcessEngineExtensionImpl implements BeforeTestExecutionCallback,
     }
 
     private boolean parameterIsProcessEngineExtension(final ParameterContext parameterContext) {
-        return parameterContext.getParameter().getType().equals(ProcessEngineExtension.class);
+        return parameterContext.getParameter().getType().equals(TestProcessEngine.class);
     }
 
     @SuppressWarnings("PMD.AccessorMethodGeneration")
-    private ProcessEngineExtension getProcessEngineExtension() {
-        return new ProcessEngineExtension() {
+    private TestProcessEngine getProcessEngineExtension() {
+        return new TestProcessEngine() {
             @Override
             public ProcessEngine getProcessEngine() {
                 return processEngineHolder.get();

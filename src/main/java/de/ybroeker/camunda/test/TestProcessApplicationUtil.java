@@ -1,4 +1,4 @@
-package de.ybroeker.camunda.test.test;
+package de.ybroeker.camunda.test;
 
 import java.util.concurrent.atomic.AtomicReference;
 

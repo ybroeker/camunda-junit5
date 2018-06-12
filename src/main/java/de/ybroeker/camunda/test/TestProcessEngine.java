@@ -1,4 +1,4 @@
-package de.ybroeker.camunda.test.test;
+package de.ybroeker.camunda.test;
 
 import java.util.Date;
 
@@ -9,7 +9,7 @@ import org.camunda.bpm.engine.impl.ProcessEngineImpl;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.util.ClockUtil;
 
-public interface ProcessEngineExtension extends ProcessEngineServices {
+public interface TestProcessEngine extends ProcessEngineServices {
 
     /**
      * @see #unregisterProcessApplication(boolean)
