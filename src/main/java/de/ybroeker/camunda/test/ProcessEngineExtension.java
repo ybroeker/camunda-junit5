@@ -23,6 +23,8 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
                                                AfterTestExecutionCallback,
                                                ParameterResolver {
 
+    private static String DEFAULT_CONFIGURATION_RESOURCE = "camunda.cfg.xml";
+
     //Per Instance
     private String configurationResource = "camunda.cfg.xml";
 
@@ -156,20 +158,14 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
 
     @Override
     public boolean supportsParameter(final ParameterContext parameterContext, final ExtensionContext extensionContext) {
-        return parameterIsProcessEngineExtension(parameterContext);
+        return parameterContext.getParameter().getType().equals(TestProcessEngine.class);
     }
 
     @Override
     public Object resolveParameter(final ParameterContext parameterContext, final ExtensionContext extensionContext) {
-        if (parameterIsProcessEngineExtension(parameterContext)) {
-            return getProcessEngineExtension();
-        }
-        return null;
+        return getProcessEngineExtension();
     }
 
-    private boolean parameterIsProcessEngineExtension(final ParameterContext parameterContext) {
-        return parameterContext.getParameter().getType().equals(TestProcessEngine.class);
-    }
 
     @SuppressWarnings("PMD.AccessorMethodGeneration")
     private TestProcessEngine getProcessEngineExtension() {
