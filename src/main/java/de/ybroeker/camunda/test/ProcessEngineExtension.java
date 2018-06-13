@@ -68,7 +68,7 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
 
 
     @Override
-    public void afterTestExecution(final ExtensionContext extensionContext) throws Exception {
+    public void afterTestExecution(final ExtensionContext extensionContext) {
         final ProcessEngine processEngine = processEngineHolder.get();
 
         processEngine.getIdentityService().clearAuthentication();
@@ -107,7 +107,7 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
     }
 
     @Override
-    public void beforeTestExecution(final ExtensionContext extensionContext) throws Exception {
+    public void beforeTestExecution(final ExtensionContext extensionContext) {
         final ProcessEngine processEngine = processEngineHolder.get();
         Objects.requireNonNull(processEngine);
         //TODO: check required HistoryLevel
@@ -174,14 +174,19 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
     @SuppressWarnings("PMD.AccessorMethodGeneration")
     private TestProcessEngine getProcessEngineExtension() {
         return new TestProcessEngine() {
+
+            private final ProcessEngine processEngine = processEngineHolder.get();
+
+            private final String deploymentId = deploymentIdHolder.get();
+
             @Override
             public ProcessEngine getProcessEngine() {
-                return processEngineHolder.get();
+                return processEngine;
             }
 
             @Override
             public String getDeploymentId() {
-                return deploymentIdHolder.get();
+                return deploymentId;
             }
         };
     }

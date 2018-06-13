@@ -198,6 +198,7 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>${junit-jupiter.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -206,12 +207,6 @@
             <version>16.0.1</version>
         </dependency>
 
-        <dependency>
-            <groupId>name.falgout.jeffrey.testing.junit5</groupId>
-            <artifactId>extension-testing</artifactId>
-            <version>1.0.1</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <!-- Needed for InMemoryH2Test -->
             <groupId>com.h2database</groupId>
