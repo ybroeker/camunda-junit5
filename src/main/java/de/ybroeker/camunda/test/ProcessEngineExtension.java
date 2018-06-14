@@ -23,10 +23,12 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
                                                AfterTestExecutionCallback,
                                                ParameterResolver {
 
-    private static String DEFAULT_CONFIGURATION_RESOURCE = "camunda.cfg.xml";
+    public static final String PROCESS_ENGINE_KEY = "PROCESS_ENGINE";
+
+    private static final String DEFAULT_CONFIGURATION_RESOURCE = "camunda.cfg.xml";
 
     //Per Instance
-    private String configurationResource = "camunda.cfg.xml";
+    private String configurationResource = DEFAULT_CONFIGURATION_RESOURCE;
 
     private final boolean ensureCleanAfterTest;
 
@@ -88,7 +90,7 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
         if (ensureCleanAfterTest) {
             closeProcessEngine();
         }
-
+        getStore(extensionContext).remove(PROCESS_ENGINE_KEY);
     }
 
     /**
@@ -125,7 +127,14 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
                 deployment
         );
         this.deploymentIdHolder.set(deploymentId);
+        getStore(extensionContext).put(PROCESS_ENGINE_KEY, processEngine);
     }
+
+    private ExtensionContext.Store getStore(ExtensionContext context) {
+        return context.getStore(ExtensionContext.Namespace.create(context.getRequiredTestClass(),
+                                                                  context.getRequiredTestMethod()));
+    }
+
 
     private ProcessEngine getNewProcessEngine() {
         return getNewProcessEngine(this.configurationResource);
