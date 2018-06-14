@@ -30,21 +30,11 @@ public class TestProcessApplicationUtil {
     public static EmbeddedProcessApplication processApplication(final ExecutionListener executionListener,
                                                                 final AtomicReference<String> userTaskHolder) {
 
-        return new EmbeddedProcessApplication() {
-            @Override
-            public ExecutionListener getExecutionListener() {
-                return executionListener;
+        return processApplication(executionListener, delegateTask -> {
+            if (delegateTask.getEventName().equals(TaskListener.EVENTNAME_CREATE)) {
+                userTaskHolder.set(delegateTask.getName());
             }
-
-            @Override
-            public TaskListener getTaskListener() {
-                return delegateTask -> {
-                    if (delegateTask.getEventName().equals(TaskListener.EVENTNAME_CREATE)) {
-                        userTaskHolder.set(delegateTask.getName());
-                    }
-                };
-            }
-        };
+        });
     }
 
 }
