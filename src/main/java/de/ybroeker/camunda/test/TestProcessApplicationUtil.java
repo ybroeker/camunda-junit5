@@ -1,5 +1,6 @@
 package de.ybroeker.camunda.test;
 
+import java.util.Queue;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.camunda.bpm.application.impl.EmbeddedProcessApplication;
@@ -33,6 +34,20 @@ public class TestProcessApplicationUtil {
         return processApplication(executionListener, delegateTask -> {
             if (delegateTask.getEventName().equals(TaskListener.EVENTNAME_CREATE)) {
                 userTaskHolder.set(delegateTask.getName());
+            }
+        });
+    }
+
+    /**
+     * Creates an EmbeddedProcessApplication with the executionListener and
+     * adds the TaskName of each created Task to userTaskHolder.
+     */
+    public static EmbeddedProcessApplication processApplication(final ExecutionListener executionListener,
+                                                                final Queue<String> userTaskHolder) {
+
+        return processApplication(executionListener, delegateTask -> {
+            if (delegateTask.getEventName().equals(TaskListener.EVENTNAME_CREATE)) {
+                userTaskHolder.add(delegateTask.getName());
             }
         });
     }
