@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.extension.*;
 
 import static org.junit.platform.commons.util.AnnotationUtils.findAnnotation;
+import static org.junit.platform.commons.util.AnnotationUtils.isAnnotated;
 
 /**
  * ProcessEngineRule adapted as JUnit 5-Extension.
@@ -31,7 +32,7 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
     //Per Instance
     private String configurationResource = DEFAULT_CONFIGURATION_RESOURCE;
 
-    private final boolean ensureCleanAfterTest;
+    //private final boolean ensureCleanAfterTest;
 
 
     //Per Testcase
@@ -42,33 +43,17 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
 
     private final ThreadLocal<AtomicReference<String>> deploymentIdHolder = ThreadLocal.withInitial(AtomicReference::new);
 
-
     public ProcessEngineExtension() {
-        this(false);
-    }
-
-    public ProcessEngineExtension(final boolean ensureCleanAfterTest) {
-        this.ensureCleanAfterTest = ensureCleanAfterTest;
         this.processEngineHolder = ThreadLocal.withInitial(this::getNewProcessEngine);
     }
 
     public ProcessEngineExtension(final String configurationResource) {
-        this(configurationResource, false);
-    }
-
-    public ProcessEngineExtension(final String configurationResource, final boolean ensureCleanAfterTest) {
         this.configurationResource = configurationResource;
-        this.ensureCleanAfterTest = ensureCleanAfterTest;
         this.processEngineHolder = ThreadLocal.withInitial(this::getNewProcessEngine);
     }
 
     public ProcessEngineExtension(final ProcessEngine processEngine) {
-        this(processEngine, false);
-    }
-
-    public ProcessEngineExtension(final ProcessEngine processEngine, final boolean ensureCleanAfterTest) {
         this.processEngineHolder = ThreadLocal.withInitial(() -> processEngine);
-        this.ensureCleanAfterTest = ensureCleanAfterTest;
     }
 
 
@@ -78,9 +63,11 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
 
         processEngine.getIdentityService().clearAuthentication();
         processEngine.getProcessEngineConfiguration().setTenantCheckEnabled(true);
+        processEngine.getManagementService().unregisterProcessApplication(deploymentIdHolder.get().get(), true);
 
         this.deleteDeployments();
 
+        boolean ensureCleanAfterTest = isAnnotated(extensionContext.getElement(), EnsureCleanAfterTest.class);
         if (ensureCleanAfterTest) {
             TestHelper.assertAndEnsureCleanDbAndCache(processEngine);
         }

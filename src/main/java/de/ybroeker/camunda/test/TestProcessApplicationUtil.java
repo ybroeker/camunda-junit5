@@ -27,6 +27,10 @@ public class TestProcessApplicationUtil {
     /**
      * Creates an EmbeddedProcessApplication with the executionListener and
      * updates userTaskHolder at each created Task with the current Task-Name.
+     *
+     * @param executionListener the executionListener
+     * @param userTaskHolder    the holder for the current UserTask-Name
+     * @return the created EmbeddedProcessApplication
      */
     public static EmbeddedProcessApplication processApplication(final ExecutionListener executionListener,
                                                                 final AtomicReference<String> userTaskHolder) {
@@ -41,6 +45,10 @@ public class TestProcessApplicationUtil {
     /**
      * Creates an EmbeddedProcessApplication with the executionListener and
      * adds the TaskName of each created Task to userTaskHolder.
+     *
+     * @param executionListener the executionListener
+     * @param userTaskHolder    the queue, to which UserTask-Names are added
+     * @return the created EmbeddedProcessApplication
      */
     public static EmbeddedProcessApplication processApplication(final ExecutionListener executionListener,
                                                                 final Queue<String> userTaskHolder) {
