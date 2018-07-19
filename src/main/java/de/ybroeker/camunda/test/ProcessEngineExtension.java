@@ -1,6 +1,7 @@
 package de.ybroeker.camunda.test;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.ProcessEngineConfiguration;
@@ -39,7 +40,7 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
 
     private final ThreadLocal<@NotNull ProcessEngine> processEngineHolder;
 
-    private final ThreadLocal<String> deploymentIdHolder = new ThreadLocal<>();
+    private final ThreadLocal<AtomicReference<String>> deploymentIdHolder = ThreadLocal.withInitial(AtomicReference::new);
 
 
     public ProcessEngineExtension() {
@@ -99,7 +100,7 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     private void deleteDeployments() {
         final ProcessEngine processEngine = processEngineHolder.get();
-        TestHelper.deleteDeployment(processEngine, deploymentIdHolder.get());
+        TestHelper.deleteDeployment(processEngine, deploymentIdHolder.get().get());
         for (final String additionalDeployment : additionalDeployments) {
             TestHelper.deleteDeployment(processEngine, additionalDeployment);
         }
@@ -126,7 +127,7 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
                 testMethodName,
                 deployment
         );
-        this.deploymentIdHolder.set(deploymentId);
+        this.deploymentIdHolder.get().set(deploymentId);
         getStore(extensionContext).put(PROCESS_ENGINE_KEY, processEngine);
     }
 
@@ -182,7 +183,7 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
 
             private final ProcessEngine processEngine = processEngineHolder.get();
 
-            private final String deploymentId = deploymentIdHolder.get();
+            private final AtomicReference<String> deploymentId = deploymentIdHolder.get();
 
             @Override
             public ProcessEngine getProcessEngine() {
@@ -191,7 +192,7 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
 
             @Override
             public String getDeploymentId() {
-                return deploymentId;
+                return deploymentId.get();
             }
         };
     }
