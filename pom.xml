@@ -7,9 +7,8 @@
     <groupId>de.ybroeker</groupId>
     <artifactId>camunda-junit5</artifactId>
     <version>0.0.4</version>
-
     <inceptionYear>2018</inceptionYear>
-
+    <name>Camunda JUnit 5</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -229,6 +228,40 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Adding header to file -->
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <!-- Template location -->
+                    <header>codecheck/apache_header_template.txt</header>
+                    <strictCheck>true</strictCheck>
+                    <includes>
+                        <include>**/*.java</include>
+                    </includes>
+                    <mapping>
+                        <java>SLASHSTAR_STYLE</java>
+                    </mapping>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>format</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>aware</groupId>
+                        <artifactId>codecheck</artifactId>
+                        <version>1.0-SNAPSHOT</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
         </plugins>
     </build>
 
@@ -315,5 +348,19 @@
             </build>
         </profile>
     </profiles>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/ybroeker/camunda-junit5</url>
+        <connection>scm:git:git@github.com:ybroeker/camunda-junit5.git</connection>
+        <developerConnection>scm:git:git@github.com:ybroeker/camunda-junit5.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 
 </project>
