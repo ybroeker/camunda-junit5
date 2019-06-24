@@ -10,8 +10,8 @@ import org.assertj.core.api.Assertions;
 import org.camunda.bpm.engine.test.Deployment;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.api.extension.ParameterContext;
+import org.junit.jupiter.api.extension.*;
+
 
 class TestProcessExtensionTest {
 
@@ -116,6 +116,11 @@ class TestProcessExtensionTest {
 
         @Override
         public Optional<Object> getTestInstance() {
+            return Optional.empty();
+        }
+
+        @Override
+        public Optional<TestInstances> getTestInstances() {
             return Optional.empty();
         }
 
