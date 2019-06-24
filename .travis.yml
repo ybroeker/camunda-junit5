@@ -1,5 +1,8 @@
 language: java
+dist: xenial
 jdk:
   - openjdk8
   - openjdk11
-script: mvn clean verify
+  - openjdk12
+  - openjdk-ea
+script: mvn clean verify -B
