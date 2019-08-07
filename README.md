@@ -46,7 +46,7 @@ Add dependency:
 <dependency>
     <groupId>com.github.ybroeker</groupId>
     <artifactId>camunda-junit5</artifactId>
-    <version>0.0.4</version>
+    <version>0.0.5</version>
     <scope>test</scope>
 </dependency>
 ```
