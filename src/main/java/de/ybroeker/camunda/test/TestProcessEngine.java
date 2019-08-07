@@ -15,7 +15,7 @@
  */
 package de.ybroeker.camunda.test;
 
-import java.util.Date;
+import java.util.*;
 
 import org.camunda.bpm.application.ProcessApplicationInterface;
 import org.camunda.bpm.application.ProcessApplicationReference;
@@ -23,6 +23,8 @@ import org.camunda.bpm.engine.*;
 import org.camunda.bpm.engine.impl.ProcessEngineImpl;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.util.ClockUtil;
+import org.camunda.bpm.engine.repository.Deployment;
+
 
 public interface TestProcessEngine extends ProcessEngineServices {
 
@@ -118,5 +120,7 @@ public interface TestProcessEngine extends ProcessEngineServices {
     ProcessEngine getProcessEngine();
 
     String getDeploymentId();
+
+    Deployment getDeployment();
 
 }

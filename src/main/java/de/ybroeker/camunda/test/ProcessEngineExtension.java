@@ -55,7 +55,7 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
 
     private final ThreadLocal<@NotNull ProcessEngine> processEngineHolder;
 
-    private final ThreadLocal<AtomicReference<String>> deploymentIdHolder = ThreadLocal.withInitial(AtomicReference::new);
+    private final ThreadLocal<AtomicReference<Deployment>> deploymentHolder = ThreadLocal.withInitial(AtomicReference::new);
 
     public ProcessEngineExtension() {
         this.processEngineHolder = ThreadLocal.withInitial(this::getNewProcessEngine);
@@ -77,7 +77,7 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
 
         processEngine.getIdentityService().clearAuthentication();
         processEngine.getProcessEngineConfiguration().setTenantCheckEnabled(true);
-        processEngine.getManagementService().unregisterProcessApplication(deploymentIdHolder.get().get(), true);
+        processEngine.getManagementService().unregisterProcessApplication(deploymentHolder.get().get().getId(), true);
 
         this.deleteDeployments();
 
@@ -101,11 +101,11 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
     @SuppressWarnings("PMD.DataflowAnomalyAnalysis")
     private void deleteDeployments() {
         final ProcessEngine processEngine = processEngineHolder.get();
-        TestHelper.deleteDeployment(processEngine, deploymentIdHolder.get().get());
+        TestHelper.deleteDeployment(processEngine, deploymentHolder.get().get().getId());
         for (final String additionalDeployment : additionalDeployments) {
             TestHelper.deleteDeployment(processEngine, additionalDeployment);
         }
-        deploymentIdHolder.remove();
+        deploymentHolder.remove();
     }
 
     private ProcessEngineConfigurationImpl getProcessEngineConfiguration(final ProcessEngine processEngine) {
@@ -120,7 +120,7 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
 
         Deployment deployment = Deployments.loadDeployments(extensionContext, processEngine);
 
-        this.deploymentIdHolder.get().set(deployment.getId());
+        this.deploymentHolder.get().set(deployment);
         getStore(extensionContext).put(PROCESS_ENGINE_KEY, processEngine);
     }
 
@@ -176,7 +176,7 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
 
             private final ProcessEngine processEngine = processEngineHolder.get();
 
-            private final AtomicReference<String> deploymentId = deploymentIdHolder.get();
+            private final AtomicReference<Deployment> deployment = deploymentHolder.get();
 
             @Override
             public ProcessEngine getProcessEngine() {
@@ -185,7 +185,12 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
 
             @Override
             public String getDeploymentId() {
-                return deploymentId.get();
+                return deployment.get().getId();
+            }
+
+            @Override
+            public Deployment getDeployment() {
+                return deployment.get();
             }
         };
     }
