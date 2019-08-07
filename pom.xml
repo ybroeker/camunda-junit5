@@ -6,7 +6,7 @@
 
     <groupId>de.ybroeker</groupId>
     <artifactId>camunda-junit5</artifactId>
-    <version>0.0.5</version>
+    <version>0.0.6-SNAPSHOT</version>
     <inceptionYear>2018</inceptionYear>
     <name>Camunda JUnit 5</name>
     <properties>
