@@ -16,7 +16,7 @@
 package de.ybroeker.camunda.test;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.*;
 
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.ProcessEngineConfiguration;
@@ -24,11 +24,10 @@ import org.camunda.bpm.engine.impl.ProcessEngineImpl;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.test.TestHelper;
 import org.camunda.bpm.engine.impl.util.ClockUtil;
-import org.camunda.bpm.engine.test.Deployment;
+import org.camunda.bpm.engine.repository.Deployment;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.extension.*;
 
-import static org.junit.platform.commons.util.AnnotationUtils.findAnnotation;
 import static org.junit.platform.commons.util.AnnotationUtils.isAnnotated;
 
 /**
@@ -119,17 +118,9 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
         Objects.requireNonNull(processEngine);
         //TODO: check required HistoryLevel
 
-        final Class<?> testClazz = extensionContext.getRequiredTestClass();
-        final String testMethodName = extensionContext.getRequiredTestMethod().getName();
-        final Deployment deployment = findAnnotation(extensionContext.getElement(), Deployment.class).orElse(null);
+        Deployment deployment = Deployments.loadDeployments(extensionContext, processEngine);
 
-        final String deploymentId = TestHelper.annotationDeploymentSetUp(
-                processEngine,
-                testClazz,
-                testMethodName,
-                deployment
-        );
-        this.deploymentIdHolder.get().set(deploymentId);
+        this.deploymentIdHolder.get().set(deployment.getId());
         getStore(extensionContext).put(PROCESS_ENGINE_KEY, processEngine);
     }
 
@@ -163,7 +154,7 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
         return configurationResource;
     }
 
-    public void manageDeployment(final org.camunda.bpm.engine.repository.Deployment deployment) {
+    public void manageDeployment(final Deployment deployment) {
         this.additionalDeployments.add(deployment.getId());
     }
 
