@@ -8,6 +8,8 @@
         Custom rules
     </description>
 
+    <exclude-pattern>.*/module-info.java</exclude-pattern>
+
     <rule ref="category/java/bestpractices.xml">
         <exclude name="GuardLogStatement"/>
 
