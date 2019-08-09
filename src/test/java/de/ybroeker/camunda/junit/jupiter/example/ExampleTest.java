@@ -13,12 +13,11 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package de.ybroeker.camunda.test.example;
+package de.ybroeker.camunda.junit.jupiter.example;
 
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.*;
 
-import de.ybroeker.camunda.test.*;
+import de.ybroeker.camunda.junit.jupiter.*;
 import org.assertj.core.api.Assertions;
 import org.camunda.bpm.application.impl.EmbeddedProcessApplication;
 import org.camunda.bpm.engine.delegate.TaskListener;

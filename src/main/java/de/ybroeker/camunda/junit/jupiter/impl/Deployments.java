@@ -13,32 +13,26 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package de.ybroeker.camunda.test;
+package de.ybroeker.camunda.junit.jupiter.impl;
 
 import java.io.InputStream;
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.impl.test.TestHelper;
 import org.camunda.bpm.engine.repository.DeploymentBuilder;
 import org.camunda.bpm.engine.test.Deployment;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 import static org.junit.platform.commons.util.AnnotationUtils.findAnnotation;
 
 
 public class Deployments {
-
-    /*
-     * Annotated Method:
-     * 1. explicit resources
-     * 2. /ClassName.methodName.bpmn
-     * Annotated Class:
-     * 1. explicit resources
-     * 2. ClassName.bpmn
-     */
-
 
     public static org.camunda.bpm.engine.repository.Deployment loadDeployments(final ExtensionContext extensionContext, final ProcessEngine processEngine) {
         Map<String, InputStream> resources = findResources(extensionContext);
@@ -65,45 +59,46 @@ public class Deployments {
     }
 
     private static Deployment findDeploymentAnnotation(final ExtensionContext extensionContext) {
-        final Deployment deployment = findAnnotation(extensionContext.getElement(), Deployment.class)
-                .orElseGet(() ->
-                                   findAnnotation(extensionContext.getTestClass(), Deployment.class)
-                                           .orElseThrow(() -> new IllegalArgumentException("Deployment not present!"))
-                );
-
-        return deployment;
+        return Stream.of(extensionContext.getElement(), extensionContext.getTestMethod(), extensionContext.getTestClass())
+                .map(element -> findAnnotation(element, Deployment.class))
+                .filter(Optional::isPresent).map(Optional::get)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Deployment not present!"));
     }
 
     private static Map<String, InputStream> findExplicitResources(Class<?> testClazz, final String... resources) {
         Map<String, InputStream> map = new HashMap<>();
 
         for (final String resource : resources) {
-            {
-                final InputStream classPathResource = testClazz.getClassLoader().getResourceAsStream(resource);
-                if (classPathResource != null) {
-                    map.put(resource, classPathResource);
-                }
-            }
+            findResource(resource, testClazz.getClassLoader()::getResourceAsStream)
+                    .ifPresent(stream -> map.put(resource, stream));
 
-            {
-                InputStream classRelativeResource = testClazz.getResourceAsStream(resource);
-                if (classRelativeResource != null) {
-                    map.put(resource, classRelativeResource);
-                }
-            }
+            findResource(resource, testClazz::getResourceAsStream)
+                    .ifPresent(stream -> map.put(resource, stream));
         }
 
         return map;
     }
 
     private static Map<String, InputStream> findMethodResources(Class<?> testClazz, Method method) {
-        if (!method.isAnnotationPresent(Deployment.class)) {
+        String resourceName = testClazz.getSimpleName() + "." + method.getName();
+        return findResources(method, testClazz, resourceName);
+    }
+
+    private static Map<String, InputStream> findClassResources(Class<?> testClazz) {
+        final String resourceName = testClazz.getSimpleName();
+        return findResources(testClazz, testClazz, resourceName);
+    }
+
+    @NotNull
+    private static Map<String, InputStream> findResources(final AnnotatedElement element, final Class<?> testClazz, final String resourceName) {
+        if (!element.isAnnotationPresent(Deployment.class)) {
             return Collections.emptyMap();
         }
 
         Map<String, InputStream> map = new HashMap<>();
         for (final String suffix : TestHelper.RESOURCE_SUFFIXES) {
-            String resource = testClazz.getSimpleName() + "." + method.getName() + "." + suffix;
+            String resource = resourceName + "." + suffix;
             InputStream stream = testClazz.getResourceAsStream(resource);
             if (stream != null) {
                 map.put(resource, stream);
@@ -112,20 +107,9 @@ public class Deployments {
         return map;
     }
 
-    private static Map<String, InputStream> findClassResources(Class<?> testClazz) {
-        if (!testClazz.isAnnotationPresent(Deployment.class)) {
-            return Collections.emptyMap();
-        }
-
-        Map<String, InputStream> map = new HashMap<>();
-        for (final String suffix : TestHelper.RESOURCE_SUFFIXES) {
-            String resource = testClazz.getSimpleName() + "." + suffix;
-            InputStream stream = testClazz.getResourceAsStream(resource);
-            if (stream != null) {
-                map.put(resource, stream);
-            }
-        }
-        return map;
+    private static Optional<InputStream> findResource(String name, Function<String, InputStream> loader) {
+        InputStream stream = loader.apply(name);
+        return Optional.ofNullable(stream);
     }
 
 }

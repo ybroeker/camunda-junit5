@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package de.ybroeker.camunda.test;
+package de.ybroeker.camunda.junit.jupiter;
 
 import java.util.*;
 
@@ -26,22 +26,22 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @ExtendWith(ProcessEngineExtension.class)
 public class ResourcePathTest {
 
-    @Deployment(resources = "de/ybroeker/camunda/test/Workflow.bpmn")
+    @Deployment(resources = "de/ybroeker/camunda/junit/jupiter/Workflow.bpmn")
     @Test
     void shouldLoadFullPath(final TestProcessEngine testProcessEngine) {
         final String deploymentId = testProcessEngine.getDeploymentId();
         final List<String> deployedResources = testProcessEngine.getRepositoryService().getDeploymentResourceNames(deploymentId);
 
-        Assertions.assertThat(deployedResources).containsExactly("de/ybroeker/camunda/test/Workflow.bpmn");
+        Assertions.assertThat(deployedResources).containsExactly("de/ybroeker/camunda/junit/jupiter/Workflow.bpmn");
     }
 
-    @Deployment(resources = "/de/ybroeker/camunda/test/Workflow.bpmn")
+    @Deployment(resources = "/de/ybroeker/camunda/junit/jupiter/Workflow.bpmn")
     @Test
     void shouldLoadAbsolutePath(final TestProcessEngine testProcessEngine) {
         final String deploymentId = testProcessEngine.getDeploymentId();
         final List<String> deployedResources = testProcessEngine.getRepositoryService().getDeploymentResourceNames(deploymentId);
 
-        Assertions.assertThat(deployedResources).containsExactly("/de/ybroeker/camunda/test/Workflow.bpmn");
+        Assertions.assertThat(deployedResources).containsExactly("/de/ybroeker/camunda/junit/jupiter/Workflow.bpmn");
     }
 
     @Deployment(resources = "Workflow.bpmn")

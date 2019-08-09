@@ -1,0 +1,2 @@
+--add-opens de.ybroeker.camunda.junit.jupiter/de.ybroeker.camunda.junit.jupiter.example=org.junit.platform.commons
+--add-opens de.ybroeker.camunda.junit.jupiter/de.ybroeker.camunda.junit.jupiter=org.junit.platform.commons

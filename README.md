@@ -22,7 +22,7 @@ class ExampleTest {
 
 It allows to add `TestProcessEngine` as method-parameter,  which provides access to repositories, services and ProcessEngine, and allows registration of ProcessApplications
 
-An example can be found in `de.ybroeker.camunda.test.example.ExampleTest`.
+An example can be found in `de.ybroeker.camunda.junit.jupiter.example.ExampleTest`.
 
 ## Maven
 

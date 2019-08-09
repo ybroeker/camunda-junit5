@@ -13,11 +13,12 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package de.ybroeker.camunda.test;
+package de.ybroeker.camunda.junit.jupiter;
 
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
+import de.ybroeker.camunda.junit.jupiter.impl.Deployments;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.ProcessEngineConfiguration;
 import org.camunda.bpm.engine.impl.ProcessEngineImpl;

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.ybroeker</groupId>
-    <artifactId>camunda-junit5</artifactId>
+    <artifactId>camunda-junit-jupiter</artifactId>
     <version>0.0.6-SNAPSHOT</version>
     <inceptionYear>2018</inceptionYear>
     <name>Camunda JUnit 5</name>
@@ -40,13 +40,41 @@
                     <showDeprecation>true</showDeprecation>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <release>${java.version}</release>
                     <compilerArgs>
                         <arg>-Xlint:all</arg>
                         <arg>-Xlint:-processing</arg>
                         <arg>-Xlint:-path</arg>
+                        <arg>-Xlint:-requires-transitive-automatic</arg>
+                        <arg>-Xlint:-requires-automatic</arg>
                         <arg>-Werror</arg>
                     </compilerArgs>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>default-compile</id>
+                        <configuration>
+                            <release>11</release>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>default-testCompile</id>
+                        <configuration>
+                            <release>11</release>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>base-compile</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <excludes>
+                                <exclude>module-info.java</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
 
@@ -62,6 +90,9 @@
                         <version>${junit-jupiter.version}</version>
                     </dependency>
                 </dependencies>
+                <configuration>
+                    <argLine>@${project.build.testSourceDirectory}/module-info.test</argLine>
+                </configuration>
             </plugin>
 
             <!--Failsafe-->
