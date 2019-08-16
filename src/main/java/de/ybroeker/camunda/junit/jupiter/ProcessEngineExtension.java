@@ -29,7 +29,8 @@ import org.camunda.bpm.engine.repository.Deployment;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.extension.*;
 
-import static org.junit.platform.commons.util.AnnotationUtils.isAnnotated;
+import static org.junit.platform.commons.support.AnnotationSupport.isAnnotated;
+
 
 /**
  * ProcessEngineRule adapted as JUnit 5-Extension.

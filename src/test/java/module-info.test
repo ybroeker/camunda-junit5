@@ -1,2 +1,5 @@
+--add-exports org.junit.platform.commons/org.junit.platform.commons.util=ALL-UNNAMED
+--add-exports org.junit.platform.commons/org.junit.platform.commons.logging=ALL-UNNAMED
+
 --add-opens de.ybroeker.camunda.junit.jupiter/de.ybroeker.camunda.junit.jupiter.example=org.junit.platform.commons
 --add-opens de.ybroeker.camunda.junit.jupiter/de.ybroeker.camunda.junit.jupiter=org.junit.platform.commons

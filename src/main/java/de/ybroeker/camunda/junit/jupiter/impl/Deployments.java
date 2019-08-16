@@ -28,9 +28,7 @@ import org.camunda.bpm.engine.repository.DeploymentBuilder;
 import org.camunda.bpm.engine.test.Deployment;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.extension.ExtensionContext;
-
-import static org.junit.platform.commons.util.AnnotationUtils.findAnnotation;
-
+import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
 
 public class Deployments {
 
@@ -65,6 +63,7 @@ public class Deployments {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Deployment not present!"));
     }
+
 
     private static Map<String, InputStream> findExplicitResources(Class<?> testClazz, final String... resources) {
         Map<String, InputStream> map = new HashMap<>();
