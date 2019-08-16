@@ -23,8 +23,8 @@
         <assertj.version>3.13.2</assertj.version>
         <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
 
-        <pmd.version>6.15.0</pmd.version>
-        <checkstyle.version>8.22</checkstyle.version>
+        <pmd.version>6.17.0</pmd.version>
+        <checkstyle.version>8.23</checkstyle.version>
     </properties>
 
     <build>
