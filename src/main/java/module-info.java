@@ -16,8 +16,9 @@
 module de.ybroeker.camunda.junit.jupiter {
     requires transitive camunda.engine;
     requires transitive org.junit.jupiter.api;
+
     requires org.junit.platform.commons;
-    requires org.jetbrains.annotations;
+    requires static org.jetbrains.annotations;
 
     exports de.ybroeker.camunda.junit.jupiter;
 }
