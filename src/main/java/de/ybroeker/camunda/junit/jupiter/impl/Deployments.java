@@ -28,9 +28,14 @@ import org.camunda.bpm.engine.repository.DeploymentBuilder;
 import org.camunda.bpm.engine.test.Deployment;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.extension.ExtensionContext;
+
 import static org.junit.platform.commons.support.AnnotationSupport.findAnnotation;
 
 public class Deployments {
+
+    public static boolean hasDeployments(final ExtensionContext extensionContext) {
+        return findDeploymentAnnotation(extensionContext).isPresent();
+    }
 
     public static org.camunda.bpm.engine.repository.Deployment loadDeployments(final ExtensionContext extensionContext, final ProcessEngine processEngine) {
         Map<String, InputStream> resources = findResources(extensionContext);
@@ -47,21 +52,23 @@ public class Deployments {
     }
 
     private static Map<String, InputStream> findResources(final ExtensionContext extensionContext) {
-        final Deployment deployment = findDeploymentAnnotation(extensionContext);
+        final Optional<Deployment> deployment = findDeploymentAnnotation(extensionContext);
+        if (!deployment.isPresent()) {
+            return Collections.emptyMap();
+        }
 
         Map<String, InputStream> resources = new HashMap<>();
-        resources.putAll(findExplicitResources(extensionContext.getRequiredTestClass(), deployment.resources()));
+        resources.putAll(findExplicitResources(extensionContext.getRequiredTestClass(), deployment.get().resources()));
         resources.putAll(findMethodResources(extensionContext.getRequiredTestClass(), extensionContext.getRequiredTestMethod()));
         resources.putAll(findClassResources(extensionContext.getRequiredTestClass()));
         return resources;
     }
 
-    private static Deployment findDeploymentAnnotation(final ExtensionContext extensionContext) {
+    private static Optional<Deployment> findDeploymentAnnotation(final ExtensionContext extensionContext) {
         return Stream.of(extensionContext.getElement(), extensionContext.getTestMethod(), extensionContext.getTestClass())
                 .map(element -> findAnnotation(element, Deployment.class))
                 .filter(Optional::isPresent).map(Optional::get)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Deployment not present!"));
+                .findFirst();
     }
 
 

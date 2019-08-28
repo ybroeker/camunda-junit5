@@ -60,6 +60,7 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
     private final ThreadLocal<AtomicReference<Deployment>> deploymentHolder = ThreadLocal.withInitial(AtomicReference::new);
 
     public ProcessEngineExtension() {
+        System.err.println("ProcessEngineExtension.ProcessEngineExtension");
         this.processEngineHolder = ThreadLocal.withInitial(this::getNewProcessEngine);
     }
 
@@ -75,6 +76,10 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
 
     @Override
     public void afterTestExecution(final ExtensionContext extensionContext) {
+        if (!Deployments.hasDeployments(extensionContext)) {
+            return;
+        }
+
         final ProcessEngine processEngine = processEngineHolder.get();
 
         processEngine.getIdentityService().clearAuthentication();
@@ -116,6 +121,10 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
 
     @Override
     public void beforeTestExecution(final ExtensionContext extensionContext) {
+        if (!Deployments.hasDeployments(extensionContext)) {
+            return;
+        }
+
         final ProcessEngine processEngine = processEngineHolder.get();
         Objects.requireNonNull(processEngine);
         //TODO: check required HistoryLevel
