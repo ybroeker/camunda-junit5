@@ -45,8 +45,8 @@ Add dependency:
 ```xml
 <dependency>
     <groupId>com.github.ybroeker</groupId>
-    <artifactId>camunda-junit5</artifactId>
-    <version>0.0.5</version>
+    <artifactId>camunda-junit-jupiter</artifactId>
+    <version>0.0.6</version>
     <scope>test</scope>
 </dependency>
 ```
