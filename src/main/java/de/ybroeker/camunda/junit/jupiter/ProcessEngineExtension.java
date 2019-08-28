@@ -19,6 +19,7 @@ import java.util.*;
 import java.util.concurrent.atomic.*;
 
 import de.ybroeker.camunda.junit.jupiter.impl.Deployments;
+import de.ybroeker.camunda.junit.jupiter.impl.TestProcessEngineImpl;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.ProcessEngineConfiguration;
 import org.camunda.bpm.engine.impl.ProcessEngineImpl;
@@ -180,29 +181,8 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
         return getProcessEngineExtension();
     }
 
-
-    @SuppressWarnings("PMD.AccessorMethodGeneration")
     private TestProcessEngine getProcessEngineExtension() {
-        return new TestProcessEngine() {
-
-            private final ProcessEngine processEngine = processEngineHolder.get();
-
-            private final AtomicReference<Deployment> deployment = deploymentHolder.get();
-
-            @Override
-            public ProcessEngine getProcessEngine() {
-                return processEngine;
-            }
-
-            @Override
-            public String getDeploymentId() {
-                return deployment.get().getId();
-            }
-
-            @Override
-            public Deployment getDeployment() {
-                return deployment.get();
-            }
-        };
+        return new TestProcessEngineImpl(processEngineHolder.get(), deploymentHolder.get());
     }
+
 }
