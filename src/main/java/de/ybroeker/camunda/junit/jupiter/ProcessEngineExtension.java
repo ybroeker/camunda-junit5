@@ -61,7 +61,6 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
     private final ThreadLocal<AtomicReference<Deployment>> deploymentHolder = ThreadLocal.withInitial(AtomicReference::new);
 
     public ProcessEngineExtension() {
-        System.err.println("ProcessEngineExtension.ProcessEngineExtension");
         this.processEngineHolder = ThreadLocal.withInitial(this::getNewProcessEngine);
     }
 
