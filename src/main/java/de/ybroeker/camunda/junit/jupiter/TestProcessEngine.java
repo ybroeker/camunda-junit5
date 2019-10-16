@@ -17,8 +17,7 @@ package de.ybroeker.camunda.junit.jupiter;
 
 import java.util.*;
 
-import org.camunda.bpm.application.ProcessApplicationInterface;
-import org.camunda.bpm.application.ProcessApplicationReference;
+import org.camunda.bpm.application.*;
 import org.camunda.bpm.engine.*;
 import org.camunda.bpm.engine.impl.ProcessEngineImpl;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
@@ -27,6 +26,34 @@ import org.camunda.bpm.engine.repository.Deployment;
 
 
 public interface TestProcessEngine extends ProcessEngineServices {
+
+    class Registration implements AutoCloseable, ProcessApplicationRegistration {
+
+        private final TestProcessEngine testProcessEngine;
+
+        private final ProcessApplicationRegistration processApplicationRegistration;
+
+        public Registration(final TestProcessEngine testProcessEngine, final ProcessApplicationRegistration processApplicationRegistration) {
+            this.testProcessEngine = testProcessEngine;
+            this.processApplicationRegistration = processApplicationRegistration;
+        }
+
+        @Override
+        public void close() {
+            testProcessEngine.unregisterProcessApplication();
+        }
+
+        @Override
+        public Set<String> getDeploymentIds() {
+            return processApplicationRegistration.getDeploymentIds();
+        }
+
+        @Override
+        public String getProcessEngineName() {
+            return processApplicationRegistration.getProcessEngineName();
+        }
+
+    }
 
     /**
      * @see #unregisterProcessApplication(boolean)
@@ -40,12 +67,13 @@ public interface TestProcessEngine extends ProcessEngineServices {
                                                                  removeProcessDefinitionsFromCache);
     }
 
-    default void registerProcessApplication(final ProcessApplicationInterface processApplicationInterface) {
-        this.registerProcessApplication(processApplicationInterface.getReference());
+    default Registration registerProcessApplication(final ProcessApplicationInterface processApplicationInterface) {
+       return this.registerProcessApplication(processApplicationInterface.getReference());
     }
 
-    default void registerProcessApplication(final ProcessApplicationReference processApplicationReference) {
-        this.getManagementService().registerProcessApplication(this.getDeploymentId(), processApplicationReference);
+    default Registration registerProcessApplication(final ProcessApplicationReference processApplicationReference) {
+        final ProcessApplicationRegistration processApplicationRegistration = this.getManagementService().registerProcessApplication(this.getDeploymentId(), processApplicationReference);
+        return new Registration(this, processApplicationRegistration);
     }
 
 
