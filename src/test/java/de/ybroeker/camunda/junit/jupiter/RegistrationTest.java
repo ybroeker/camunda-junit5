@@ -19,11 +19,13 @@ import de.ybroeker.camunda.junit.jupiter.TestProcessEngine.Registration;
 import org.camunda.bpm.application.impl.EmbeddedProcessApplication;
 import org.camunda.bpm.engine.test.Deployment;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static de.ybroeker.camunda.junit.jupiter.TestProcessApplicationUtil.processApplication;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
+@ExtendWith(ProcessEngineExtension.class)
 public class RegistrationTest {
 
     @Test
