@@ -22,7 +22,7 @@
         <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
 
         <pmd.version>6.17.0</pmd.version>
-        <checkstyle.version>8.23</checkstyle.version>
+        <checkstyle.version>8.29</checkstyle.version>
     </properties>
 
     <build>
