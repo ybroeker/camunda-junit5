@@ -1,6 +1,7 @@
 # camunda-junit5
 
-[![Build Status](https://travis-ci.org/ybroeker/camunda-junit5.svg?branch=master)](https://travis-ci.org/ybroeker/camunda-junit5)
+[![Build Status](https://travis-ci.org/ybroeker/camunda-junit5.svg?branch=master)](https://travis-ci.org/ybroeker/camunda-junit5) [![](https://jitpack.io/v/ybroeker/camunda-junit5.svg)](https://jitpack.io/#ybroeker/camunda-junit5)
+
 
 Adds Support for Camundas `@Deployment` in JUnit 5 environments.
 
@@ -46,7 +47,7 @@ Add dependency:
 <dependency>
     <groupId>com.github.ybroeker</groupId>
     <artifactId>camunda-junit-jupiter</artifactId>
-    <version>0.0.6</version>
+    <version>0.0.8</version>
     <scope>test</scope>
 </dependency>
 ```
