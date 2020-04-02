@@ -27,6 +27,8 @@ An example can be found in `de.ybroeker.camunda.junit.jupiter.example.ExampleTes
 
 ## Maven
 
+### Jitpack
+
 Add jitpack-repository:
 
 ```xml
@@ -46,7 +48,7 @@ Add dependency:
 ```xml
 <dependency>
     <groupId>com.github.ybroeker</groupId>
-    <artifactId>camunda-junit-jupiter</artifactId>
+    <artifactId>camunda-junit5</artifactId>
     <version>0.0.8</version>
     <scope>test</scope>
 </dependency>
