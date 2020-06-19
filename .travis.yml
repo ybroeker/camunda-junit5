@@ -2,7 +2,11 @@ language: java
 dist: xenial
 jdk:
   - openjdk11
-  - openjdk12
-  - openjdk13
+  - openjdk14
   - openjdk-ea
-script: mvn clean verify -B
+env:
+  - CAMUNDA_VERSION=7.11.0
+  - CAMUNDA_VERSION=7.12.0
+  - CAMUNDA_VERSION=7.13.0
+
+script: mvn clean verify -B -Dcamunda.version=$CAMUNDA_VERSION
