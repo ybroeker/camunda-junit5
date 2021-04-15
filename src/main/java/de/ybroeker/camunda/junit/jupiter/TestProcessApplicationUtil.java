@@ -23,6 +23,11 @@ import org.camunda.bpm.engine.delegate.ExecutionListener;
 import org.camunda.bpm.engine.delegate.TaskListener;
 
 public class TestProcessApplicationUtil {
+
+    private TestProcessApplicationUtil() {
+        throw new AssertionError("No TestProcessApplicationUtil instances for you!");
+    }
+
     public static EmbeddedProcessApplication processApplication(final ExecutionListener executionListener,
                                                                 final TaskListener taskListener) {
 
