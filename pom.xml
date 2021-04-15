@@ -4,7 +4,7 @@
 
     <groupId>de.ybroeker</groupId>
     <artifactId>camunda-junit-jupiter</artifactId>
-    <version>0.0.10-SNAPSHOT</version>
+    <version>0.0.10</version>
     <inceptionYear>2018</inceptionYear>
     <name>Camunda JUnit 5</name>
     <properties>
@@ -421,7 +421,7 @@
         <url>https://github.com/ybroeker/camunda-junit5</url>
         <connection>scm:git:https://github.com/ybroeker/camunda-junit5.git</connection>
         <developerConnection>scm:git:https://github.com/ybroeker/camunda-junit5.git</developerConnection>
-        <tag>0.0.8</tag>
+        <tag>0.0.10</tag>
     </scm>
 
 </project>
