@@ -1,6 +1,8 @@
 # camunda-junit5
 
-[![Build Status](https://travis-ci.org/ybroeker/camunda-junit5.svg?branch=master)](https://travis-ci.org/ybroeker/camunda-junit5) [![](https://jitpack.io/v/ybroeker/camunda-junit5.svg)](https://jitpack.io/#ybroeker/camunda-junit5)
+https://github.com/<OWNER>/<REPOSITORY>/actions/workflows/<WORKFLOW_FILE>/badge.svg
+
+[![Build Status](https://github.com/ybroeker/camunda-junit5/actions/workflows/maven.yml/badge.svg)](https://github.com/ybroeker/camunda-junit5/actions/workflows/maven.yml) [![](https://jitpack.io/v/ybroeker/camunda-junit5.svg)](https://jitpack.io/#ybroeker/camunda-junit5)
 
 
 Adds Support for Camundas `@Deployment` in JUnit 5 environments.
