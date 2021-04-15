@@ -148,7 +148,7 @@ public class ProcessEngineExtension implements BeforeTestExecutionCallback,
     private ProcessEngine getNewProcessEngine(final String configurationResource) {
         final ProcessEngine processEngine = ProcessEngineConfiguration
                 .createProcessEngineConfigurationFromResource(configurationResource)
-                .setJdbcUrl("jdbc:h2:mem:")//anonymous DB for each engine
+                .setJdbcUrl("jdbc:h2:mem:"+UUID.randomUUID())//anonymous DB for each engine
                 .buildProcessEngine();
 
         return processEngine;
