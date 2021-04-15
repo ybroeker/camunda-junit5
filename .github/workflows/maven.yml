@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         java: [ '11', '16' ]
-
+        camunda: ['7.11.0','7.12.0','7.13.0','7.14.0','7.15.0']
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK ${{ matrix.Java }}
@@ -26,5 +26,5 @@ jobs:
         path: ~/.m2
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
-    - name: Build on ${{ matrix.Java }}
-      run: mvn -B verify
+    - name: Build with Camunda ${{ matrix.camunda }} on ${{ matrix.Java }}
+      run: mvn -B verify -Dcamunda.version=${{ matrix.camunda }}
