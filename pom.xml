@@ -362,6 +362,33 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>java16</id>
+            <activation>
+                <jdk>16</jdk>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <artifactId>maven-compiler-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <id>default-testCompile</id>
+                                    <configuration>
+                                        <compilerArgs>
+                                            <arg>-Xlint:-missing-explicit-ctor</arg>
+                                        </compilerArgs>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
 
     <repositories>
         <repository>
