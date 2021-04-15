@@ -97,7 +97,7 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <argLine>@${project.build.testSourceDirectory}/module-info.test</argLine>
+                    <argLine>--add-opens java.base/java.util=ALL-UNNAMED @${project.build.testSourceDirectory}/module-info.test</argLine>
                 </configuration>
             </plugin>
 
